@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Annotation Task</title>
+    <style>
+      .frame{  
+          width: 100%;
+          height: 500px;
+          /* margin: 20px; */
+          padding: 20px;
+          /* border: 1px solid black; */
+          position: relative;
+      }    
+      img{  
+          max-height: 100%;  
+          max-width: 100%; 
+          position: absolute;  
+          top: 0;  
+          bottom: 0;  
+          left: 0;  
+          right: 0;  
+          margin: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <div class="grid-container" id="task">
+      <div
+        class="grid-child"
+        style="width: 50%; float: left; margin: auto; padding: 10px"
+      >
+        <div v-if="crf_files.type === 'image'">
+          <p>CRF files are image</p>
+          <div class="frame" v-for="image in crf_files.images">
+            <img
+            v-bind:src="'/static/' + image.url"
+            alt="image.alt"
+            class="image-fluid"
+          />
+          </div>
+        </div>
+        <div v-else>
+          <p>CRF file are not image</p>
+          <!-- TODO: host documents downloading here -->
+          <ul class="list-group" v-for="file in crf_files.docs">
+            <li class="list-group-item">
+              <a v-bind:href="'/static' + file.path"><% file.path %></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="grid-child"
+        style="width: 50%; float: right; margin: auto; padding: 10px"
+      >
+        <label>Number of annotations:</label>
+        <input
+          v-model="num_annot"
+          type="number"
+          v-on:keyup.enter="refresh"
+          placeholder="set number and press enter"
+          style="width: 80px"
+        />
+
+        <!-- <p>Default number of annotations: <% num_annot %></p> -->
+
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Start Time</th>
+              <th scope="col">End Time</th>
+              <th scope="col">Category</th>
+              <th scope="col">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="annot-form" v-for="(annotation, index) in annotations">
+              <th scope="row"><% index + 1 %></th>
+              <td><input v-model="annotation.start_time" type="time" name="start"></td>
+              <td><input v-model="annotation.end_time" type="time" name="end"></td>
+              <td><input v-model="annotation.category" type="text" style="width: 80px"></td>
+              <td><input v-model="annotation.value" type="text" style="width: 60px"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button v-on:click="submit" class="btn btn-success mt-5 mb-5">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // var dt = Date();
+      // var fmt = new Intl.DateTimeFormat('en-US', { hour12: false, timeStyle: 'short' });
+      
+      var vdata = {{ taskdata|safe }};
+      
+      var app = new Vue({
+        el: "#task",
+        delimiters: ["<%", "%>"],
+        data: vdata,
+        methods: {
+          submit: function (event) {
+            alert("Hello from " + this.name + "!");
+            // `event` 是原生 DOM 事件
+            if (event) {
+              alert(`event: ${event.target.tagName}`);
+            }
+          },
+          refresh: function (event) {
+            vdata.annotations = [];
+            var d = new Date();
+            var hours = d.getHours();
+            var minutes = d.getMinutes();
+            hours = hours ? hours : '00';
+            for (var i = 0; i < parseInt(this.num_annot); i++) {
+              vdata.annotations.push({
+                'start_time': `${hours}:${minutes}`,
+                'end_time': `${hours}:${minutes}`,
+                category: "pain_level",
+                value: i,
+              });
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

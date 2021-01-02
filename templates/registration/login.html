@@ -1,0 +1,29 @@
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h2>Log In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log In</button>
+</form>
+{% endblock %}
+
+
+<div id="app">
+    <p>Hello world! This is an HTML5 Boilerplate.</p>
+    <p>{{ hello }}</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+    el: '#app',
+    data: {
+        hello: 'Hello Vue!'
+    }
+    })
+</script>
