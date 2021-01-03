@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin, auth
 from django.urls import include, path
 from django.views.generic.base import TemplateView
+# from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -90,6 +90,27 @@ DATABASES = {
 }
 
 
+# Cache with Redis
+# https://realpython.com/caching-in-django-with-redis/
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SOCKET_CONNECT_TIMEOUT": 5,  # seconds
+            "SOCKET_TIMEOUT": 5,  # seconds
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+
+
+# Sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -141,7 +162,6 @@ STATICFILES_STORAGE = 'annotask.apps.AnnotaskStaticFilesStorage'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# LOGIN_REDIRECT_URL = 'new-task'
 
 ### Customized settings
 

@@ -69,6 +69,7 @@
         class="grid-child"
         style="width: 50%; float: right; margin: auto; padding: 10px"
       >
+        <p>事件标注:</p>
         <label>Number of annotations:</label>
         <input
           v-model="num_annot"
@@ -78,9 +79,7 @@
           style="width: 80px"
         />
 
-        <!-- <p>Default number of annotations: <% num_annot %></p> -->
-
-        <table class="table">
+        <table id='annotinfo' class="table">
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
@@ -101,6 +100,35 @@
           </tbody>
         </table>
 
+        <p>患者信息:</p>
+        <table id='pinfo' class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">姓名</th>
+              <th scope="col">性别</th>
+              <th scope="col">年龄</th>
+              <th scope="col">身高</th>
+              <th scope="col">体重</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="annot-form">
+              <td><input v-model="patient_info.name" type="text"></td>
+              <!-- <td><input v-model="patient_info.gender" type="text"></td> -->
+              <td>
+                <select v-model="patient_info.gender">
+                  <option disabled value="">请选择</option>
+                  <option>男</option>
+                  <option>女</option>
+                </select>
+              </td>
+              <td><input v-model="patient_info.age" type="text" style="width: 80px"></td>
+              <td><input v-model="patient_info.height" type="text" style="width: 80px" placeholder="cm"></td>
+              <td><input v-model="patient_info.weight" type="text" style="width: 80px" placeholder="kg"></td>
+            </tr>
+          </tbody>
+        </table>
+
         <button v-on:click="submit" class="btn btn-success mt-5 mb-5">
           Submit
         </button>
@@ -110,7 +138,7 @@
     <script>
       // var dt = Date();
       // var fmt = new Intl.DateTimeFormat('en-US', { hour12: false, timeStyle: 'short' });
-      
+      // risky way to get data from the backend, javascript injection is possible
       var vdata = {{ taskdata|safe }};
       
       var app = new Vue({
